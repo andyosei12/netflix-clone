@@ -1,10 +1,7 @@
 import React from "react";
 import Card from "./Card";
 import styles from "./SectionCard.module.css";
-
-interface Videos {
-  imgUrl: string;
-}
+import { Videos } from "../../models/Videos";
 
 interface SectionCardsProps {
   title: string;
@@ -12,7 +9,11 @@ interface SectionCardsProps {
   size: string;
 }
 
-const SectionCards: React.FC<SectionCardsProps> = ({ title, videos, size }) => {
+const SectionCards: React.FC<SectionCardsProps> = ({
+  title,
+  videos = [],
+  size,
+}) => {
   return (
     <section className={styles.container}>
       <h2 className={styles.title}>{title}</h2>
