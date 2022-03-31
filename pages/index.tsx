@@ -1,4 +1,4 @@
-import type { NextPage } from "next";
+import type { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import Banner from "../components/banner/Banner";
@@ -6,25 +6,21 @@ import NavBar from "../components/nav/Navbar";
 import Card from "../components/card/Card";
 import styles from "../styles/Home.module.css";
 import SectionCards from "../components/card/SectionCards";
+import { getVideos } from "../lib/videos";
+import { Videos } from "../models/Videos";
 
-const Home: NextPage = () => {
-  const disneyVideos = [
-    {
-      imgUrl: "/static/the-blacklist.jpg",
-    },
-    {
-      imgUrl: "/static/the-blacklist.jpg",
-    },
-    {
-      imgUrl: "/static/the-blacklist.jpg",
-    },
-    {
-      imgUrl: "/static/the-blacklist.jpg",
-    },
-    {
-      imgUrl: "/static/the-blacklist.jpg",
-    },
-  ];
+export const getServerSideProps: GetServerSideProps = async () => {
+  const disneyVideos = getVideos();
+  return {
+    props: { disneyVideos },
+  };
+};
+
+interface HomeProps {
+  disneyVideos: Videos[];
+}
+
+const Home: NextPage<HomeProps> = ({ disneyVideos }) => {
   return (
     <div className={styles.container}>
       <Head>
