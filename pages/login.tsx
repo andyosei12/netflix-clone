@@ -4,24 +4,40 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import styles from "../styles/Login.module.css";
+import { magic } from "../lib/magic-client";
 
 const Login: React.FC = () => {
   const [userMsg, setUserMsg] = useState("");
   const [email, setEmail] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const handleOnChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUserMsg("");
     setEmail(e.target.value);
   };
 
-  const loginWithEmailHandler = (e: React.FormEvent) => {
+  const loginWithEmailHandler = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (email) {
+      setIsLoading(true);
       if (email === "nanaosei2089@gmail.com") {
-        router.push("/");
+        // log in a user by their email
+        try {
+          const didToken = await magic.auth.loginWithMagicLink({ email });
+          console.log({ didToken });
+          if (didToken) {
+            router.push("/");
+          }
+        } catch (error) {
+          // Handle errors if required!
+          console.error("Something went wrong logging in", error);
+        } finally {
+          setIsLoading(false);
+        }
       } else {
         setUserMsg("Something went wrong logging in");
+        setIsLoading(false);
       }
     } else {
       setUserMsg("Enter a valid email address");
@@ -60,7 +76,7 @@ const Login: React.FC = () => {
           />
           <p className={styles.userMsg}>{userMsg}</p>
           <button onClick={loginWithEmailHandler} className={styles.loginBtn}>
-            Sign In
+            {isLoading ? "Loading.." : "Sign In"}
           </button>
         </div>
       </main>
