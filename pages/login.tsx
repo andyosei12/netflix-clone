@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -16,6 +16,19 @@ const Login: React.FC = () => {
     setEmail(e.target.value);
   };
 
+  useEffect(() => {
+    const handleComplete = () => {
+      setIsLoading(false);
+    };
+    router.events.on("routeChangeComplete", handleComplete);
+    router.events.on("routeChangeError", handleComplete);
+
+    return () => {
+      router.events.off("routeChangeComplete", handleComplete);
+      router.events.off("routeChangeError", handleComplete);
+    };
+  }, [router]);
+
   const loginWithEmailHandler = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -25,15 +38,14 @@ const Login: React.FC = () => {
         // log in a user by their email
         try {
           const didToken = await magic.auth.loginWithMagicLink({ email });
-          console.log({ didToken });
           if (didToken) {
+            console.log(didToken);
             router.push("/");
           }
         } catch (error) {
           // Handle errors if required!
-          console.error("Something went wrong logging in", error);
-        } finally {
           setIsLoading(false);
+          console.error("Something went wrong logging in", error);
         }
       } else {
         setUserMsg("Something went wrong logging in");
