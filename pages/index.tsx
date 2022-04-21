@@ -39,7 +39,7 @@ const Home: NextPage<HomeProps> = ({
       </Head>
 
       <div className={styles.main}>
-        <NavBar userName="Drew Osei" />
+        <NavBar />
         <Banner
           title="The Blacklist"
           subTitle="He told you not to trust him"
