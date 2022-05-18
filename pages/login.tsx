@@ -39,7 +39,6 @@ const Login: React.FC = () => {
         try {
           const didToken = await magic.auth.loginWithMagicLink({ email });
           if (didToken) {
-            console.log(didToken);
             router.push("/");
           }
         } catch (error) {

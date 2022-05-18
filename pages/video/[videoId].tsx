@@ -1,31 +1,61 @@
+import { GetStaticProps, GetStaticPaths } from "next";
 import Modal from "react-modal";
+import Navbar from "../../components/nav/Navbar";
 import { useRouter } from "next/router";
 import clsx from "classnames";
 
 import styles from "../../styles/Videos.module.css";
+import { getYoutubeVideoById } from "../../lib/videos";
 
 Modal.setAppElement("#__next");
 
-const Video: React.FC = () => {
+export const getStaticProps: GetStaticProps = async (context) => {
+  const videoId = context?.params?.videoId;
+
+  const video = await getYoutubeVideoById(videoId);
+
+  return {
+    props: {
+      video: video.length > 0 ? video[0] : {},
+    },
+    revalidate: 10,
+  };
+};
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const listOfVideos = ["-WYdUaK54fU", "Pj0wz7zu3Ms&t", "HhesaQXLuRY"];
+
+  const paths = listOfVideos.map((videoId) => ({
+    params: { videoId },
+  }));
+
+  return { paths, fallback: "blocking" };
+};
+
+type Video = {
+  title: string;
+  publishTime: string;
+  description: string;
+  channelTitle: string;
+  viewCount: string;
+};
+
+type VideoProps = {
+  video: Video;
+};
+
+const Video = ({ video }: VideoProps) => {
   const router = useRouter();
 
   const {
     query: { videoId },
   } = router;
 
-  const video = {
-    title: "The blacklist",
-    publishTime: "1990-01-17",
-    description:
-      "An FBI most want criminal now working with the FBI to help catch some criminals so as to get close to his daughter, Liz",
-    channelTitle: "NBC",
-    viewCount: 17000,
-  };
-
   const { title, publishTime, description, channelTitle, viewCount } = video;
 
   return (
     <div className={styles.container}>
+      <Navbar />
       <Modal
         isOpen={true}
         contentLabel="Watch the video"
