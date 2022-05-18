@@ -5,14 +5,20 @@ interface YoutubeVideoResults {
     };
     snippet: {
       title: string;
+      description: string;
+      publishedAt: string;
       thumbnails: {
         high: {
           url: string;
         };
       };
+      channelTitle: string;
+    };
+    statistics?: {
+      viewCount: string;
     };
   }[];
-  error: {};
+  error?: null;
 }
 
 export default YoutubeVideoResults;

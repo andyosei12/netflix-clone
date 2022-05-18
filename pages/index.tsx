@@ -41,7 +41,7 @@ const Home: NextPage<HomeProps> = ({
       <div className={styles.main}>
         <NavBar />
         <Banner
-          videoId="CaimKeDcudo"
+          videoId="-WYdUaK54fU"
           title="The Blacklist"
           subTitle="He told you not to trust him"
           imgUrl="/static/the-blacklist.jpg"

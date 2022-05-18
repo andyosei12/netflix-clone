@@ -18,7 +18,6 @@ const Banner: React.FC<BannerProps> = ({
 }) => {
   const router = useRouter();
   const handleOnPlay = () => {
-    console.log("handle on play");
     router.push(`/video/${videoId}`);
   };
   return (
