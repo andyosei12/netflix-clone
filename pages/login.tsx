@@ -34,21 +34,30 @@ const Login: React.FC = () => {
 
     if (email) {
       setIsLoading(true);
-      if (email === "nanaosei2089@gmail.com") {
-        // log in a user by their email
-        try {
-          const didToken = await magic.auth.loginWithMagicLink({ email });
-          if (didToken) {
+
+      // log in a user by their email
+      try {
+        const didToken = await magic.auth.loginWithMagicLink({ email });
+        if (didToken) {
+          const response = await fetch("/api/login", {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${didToken}`,
+              "Content-Type": "application/json",
+            },
+          });
+          const loggedInResponse = await response.json();
+          if (loggedInResponse.done) {
             router.push("/");
+          } else {
+            setIsLoading(false);
+            setUserMsg("Something went wrong loggin in");
           }
-        } catch (error) {
-          // Handle errors if required!
-          setIsLoading(false);
-          console.error("Something went wrong logging in", error);
         }
-      } else {
-        setUserMsg("Something went wrong logging in");
+      } catch (error) {
+        // Handle errors if required!
         setIsLoading(false);
+        console.error("Something went wrong logging in", error);
       }
     } else {
       setUserMsg("Enter a valid email address");
