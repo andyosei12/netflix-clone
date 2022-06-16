@@ -14,6 +14,7 @@ const Navbar: React.FC = () => {
     try {
       const getUserEmail = async () => {
         const { email } = await magic.user.getMetadata();
+        const didToken = await magic.user.getIdToken();
 
         if (email) {
           setUserName(email);

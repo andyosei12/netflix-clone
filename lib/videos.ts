@@ -24,6 +24,7 @@ export const getCommonVideos = async (url: string) => {
     const data: YoutubeVideoResults = isDev
       ? videoTestData
       : await fetchVideos(url);
+    // const data = await fetchVideos(url);
 
     if (data.error) {
       console.error("Youtube api error", data.error);
