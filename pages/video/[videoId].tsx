@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { GetStaticProps, GetStaticPaths } from "next";
 import Modal from "react-modal";
 import Navbar from "../../components/nav/Navbar";
@@ -6,6 +7,8 @@ import clsx from "classnames";
 
 import styles from "../../styles/Videos.module.css";
 import { getYoutubeVideoById } from "../../lib/videos";
+import DisLike from "../../components/icons/dislike-icon";
+import Like from "../../components/icons/like-icon";
 
 Modal.setAppElement("#__next");
 
@@ -45,8 +48,20 @@ type VideoProps = {
 };
 
 const Video = ({ video }: VideoProps) => {
+  const [toggleLike, setToggleLike] = useState(false);
+  const [toggleDislike, setToggleDislike] = useState(false);
   const router = useRouter();
 
+  const handleToggleDislike = () => {
+    setToggleDislike(!toggleDislike);
+    setToggleLike(toggleDislike);
+  };
+
+  const handleToggleLike = () => {
+    console.log("like");
+    setToggleLike(!toggleLike);
+    setToggleDislike(toggleLike);
+  };
   const {
     query: { videoId },
   } = router;
@@ -71,6 +86,20 @@ const Video = ({ video }: VideoProps) => {
           src={`https://www.youtube.com/embed/${videoId}?autoplay=1&origin=http://example.com&controls=0&rel=0`}
           frameBorder="0"
         ></iframe>
+        <div className={styles.likeDislikeBtnWrapper}>
+          <div className={styles.likeBtnWrapper}>
+            <button onClick={handleToggleLike}>
+              <div className={styles.btnWrapper}>
+                <Like selected={toggleLike} />
+              </div>
+            </button>
+          </div>
+          <button onClick={handleToggleDislike}>
+            <div className={styles.btnWrapper}>
+              <DisLike selected={toggleDislike} />
+            </div>
+          </button>
+        </div>
 
         <div className={styles.modalBody}>
           <div className={styles.modalBodyContent}>
